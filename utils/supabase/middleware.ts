@@ -1,6 +1,8 @@
 import { createServerClient } from '@supabase/ssr';
 import { type NextRequest, NextResponse } from 'next/server';
 
+import { RoutePath } from '@/enums';
+
 export const updateSession = async (request: NextRequest) => {
   let response = NextResponse.next({
     request: {
@@ -22,8 +24,7 @@ export const updateSession = async (request: NextRequest) => {
           response = NextResponse.next({ request });
 
           cookiesToSet.forEach(({ name, value, options }) =>
-            response.cookies.set(name, value, options),
-          );
+            response.cookies.set(name, value, options),);
         },
       },
     },
@@ -31,12 +32,16 @@ export const updateSession = async (request: NextRequest) => {
 
   const user = await supabase.auth.getUser();
 
-  if (request.nextUrl.pathname.startsWith('/protected') && user.error) {
-    return NextResponse.redirect(new URL('/sign-in', request.url));
+  if (request.nextUrl.pathname.startsWith(RoutePath.Protected) && user.error) {
+    return NextResponse.redirect(new URL(RoutePath.SignIn, request.url));
   }
 
-  if (request.nextUrl.pathname === '/' && !user.error) {
-    return NextResponse.redirect(new URL('/protected', request.url));
+  if (request.nextUrl.pathname === RoutePath.Home) {
+    if (user.error) {
+      return NextResponse.redirect(new URL(RoutePath.SignIn, request.url));
+    }
+
+    return NextResponse.redirect(new URL(RoutePath.Protected, request.url));
   }
 
   return response;

@@ -1,10 +1,12 @@
-import Link from 'next/link';
-
-import { signOutAction } from '@/app/actions';
+import { signOutAction } from '@/app/auth/actions';
 
 import { createClient } from '@/utils/supabase/server';
 
+import { ThemeSwitcher } from '@/components/theme-switcher';
+
+import { getFullName } from '@/utils/utils';
 import { Button } from './ui/button';
+import { HeaderAuthButtons } from './header-auth-buttons';
 
 const AuthButton = async () => {
   const {
@@ -13,21 +15,17 @@ const AuthButton = async () => {
 
   return user ? (
     <div className="flex items-center gap-4">
-      Hey, {user.email}!
-      <form action={signOutAction}>
-        <Button type="submit" variant="outline">
-          Sign out
-        </Button>
-      </form>
+      Hey, {getFullName(user)}!
+      <Button onClick={signOutAction} variant="outline">
+        Sign out
+      </Button>
+      <ThemeSwitcher />
     </div>
   ) : (
     <div className="flex gap-2">
-      <Button asChild size="sm" variant="outline">
-        <Link href="/sign-in">Sign in</Link>
-      </Button>
-      <Button asChild size="sm" variant="default">
-        <Link href="/sign-up">Sign up</Link>
-      </Button>
+      <HeaderAuthButtons />
+
+      <ThemeSwitcher />
     </div>
   );
 };

@@ -1,18 +1,19 @@
-"use client";
+'use client';
 
-import { Button } from "@/components/ui/button";
-import { type ComponentProps } from "react";
-import { useFormStatus } from "react-dom";
+import { FC, type ComponentProps } from 'react';
+import { useFormStatus } from 'react-dom';
 
-type Props = ComponentProps<typeof Button> & {
+import { Button } from '@/components/ui/button';
+
+interface SubmitButtonProps extends ComponentProps<typeof Button> {
   pendingText?: string;
-};
+}
 
-export function SubmitButton({
+export const SubmitButton: FC<SubmitButtonProps> = ({
   children,
-  pendingText = "Submitting...",
+  pendingText = 'Submitting...',
   ...props
-}: Props) {
+}) => {
   const { pending } = useFormStatus();
 
   return (
@@ -20,4 +21,4 @@ export function SubmitButton({
       {pending ? pendingText : children}
     </Button>
   );
-}
+};

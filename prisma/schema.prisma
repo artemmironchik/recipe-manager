@@ -12,8 +12,8 @@ datasource db {
 
 model Profile {
   id         String   @id @db.Uuid
-  first_name String
-  last_name  String
+  first_name String?
+  last_name  String?
   recipe     Recipe[]
 
   @@map("profile")

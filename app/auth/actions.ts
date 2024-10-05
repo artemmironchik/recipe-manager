@@ -1,10 +1,12 @@
 'use server';
 
-import { headers } from 'next/headers';
 import { redirect } from 'next/navigation';
+import { Provider } from '@supabase/supabase-js';
 
-import { encodedRedirect } from '@/utils/utils';
+import { encodedRedirect, getURL } from '@/utils/utils';
 import { createClient } from '@/utils/supabase/server';
+
+import { RoutePath } from '@/enums';
 
 export const signUpAction = async (formData: FormData) => {
   const email = formData.get('email')?.toString();
@@ -13,17 +15,15 @@ export const signUpAction = async (formData: FormData) => {
   const lastName = formData.get('lastName')?.toString();
 
   const supabase = createClient();
-  const origin = headers().get('origin');
 
-  if (!email || !password) {
-    return { error: 'Email and password are required' };
+  if (!email || !password || !firstName || !lastName) {
+    return { error: 'All parameters are required' };
   }
 
   const { error } = await supabase.auth.signUp({
     email,
     password,
     options: {
-      emailRedirectTo: `${origin}/auth/callback`,
       data: {
         first_name: firstName,
         last_name: lastName,
@@ -35,9 +35,32 @@ export const signUpAction = async (formData: FormData) => {
     // eslint-disable-next-line no-console
     console.error(`${error.code} ${error.message}`);
 
-    return encodedRedirect('error', '/sign-up', error.message);
+    return encodedRedirect('error', RoutePath.SignUp, error.message);
   }
-  return encodedRedirect('success', '/sign-up', 'Thanks for signing up!');
+
+  return encodedRedirect('success', RoutePath.SignUp, 'Thanks for signing up!');
+};
+
+export const oAuthSignInAction = async (provider: Provider) => {
+  if (!provider) {
+    return encodedRedirect('error', RoutePath.SignUp, 'No provider selected');
+  }
+
+  const supabase = createClient();
+  const redirectUrl = getURL('/auth/callback');
+
+  const { data, error } = await supabase.auth.signInWithOAuth({
+    provider,
+    options: {
+      redirectTo: redirectUrl,
+    },
+  });
+
+  if (error) {
+    return encodedRedirect('error', RoutePath.SignUp, 'Could not authenticate user');
+  }
+
+  return redirect(data.url);
 };
 
 export const signInAction = async (formData: FormData) => {
@@ -51,10 +74,10 @@ export const signInAction = async (formData: FormData) => {
   });
 
   if (error) {
-    return encodedRedirect('error', '/sign-in', error.message);
+    return encodedRedirect('error', RoutePath.SignIn, error.message);
   }
 
-  return redirect('/protected');
+  return redirect(RoutePath.Protected);
 };
 
 export const signOutAction = async () => {
@@ -62,5 +85,5 @@ export const signOutAction = async () => {
 
   await supabase.auth.signOut();
 
-  return redirect('/sign-in');
+  return redirect(RoutePath.SignIn);
 };

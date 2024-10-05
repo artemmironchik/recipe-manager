@@ -4,7 +4,7 @@ module.exports = {
     '@typescript-eslint',
     'tsc',
     'import',
-    'eslint-plugin-prettier'
+    'prettier',
   ],
   env: {
     browser: true,
@@ -41,7 +41,6 @@ module.exports = {
     'react-hooks/exhaustive-deps': 'error',
     'import/prefer-default-export': 'off',
     'import/no-anonymous-default-export': 'off',
-    'prettier/prettier': 'error',
     'semi': ['warn', 'always'],
     'max-len': ['warn', {
       code: 100,
@@ -56,6 +55,7 @@ module.exports = {
     'implicit-arrow-linebreak': 'off',
     'comma-dangle': 'off',
     '@typescript-eslint/comma-dangle': 'off',
+    'object-curly-newline': 'off',
   },
   settings: {
     'import/resolver': {

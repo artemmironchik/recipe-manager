@@ -5,6 +5,8 @@ import { createClient } from '@/utils/supabase/server';
 
 import FetchDataSteps from '@/components/tutorial/fetch-data-steps';
 
+import { RoutePath } from '@/enums';
+
 const ProtectedPage = async () => {
   const supabase = createClient();
 
@@ -13,7 +15,7 @@ const ProtectedPage = async () => {
   } = await supabase.auth.getUser();
 
   if (!user) {
-    return redirect('/sign-in');
+    return redirect(RoutePath.SignIn);
   }
 
   return (

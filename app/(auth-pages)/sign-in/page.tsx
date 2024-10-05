@@ -1,34 +1,66 @@
+import { FC } from 'react';
 import Link from 'next/link';
 
-import { signInAction } from '@/app/actions';
+import { signInAction } from '@/app/auth/actions';
 
-import { FormMessage, Message } from '@/components/form-message';
-import { SubmitButton } from '@/components/submit-button';
+import { OAuthButtons } from '@/components/oauth-buttons';
+import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
 
-const Login = ({ searchParams }: { searchParams: Message }) => (
-  <form className="flex-1 flex flex-col min-w-64">
-    <h1 className="text-2xl font-medium">Sign in</h1>
-    <p className="text-sm text-foreground">
-      Don&apos;t have an account?{' '}
-      <Link className="text-foreground font-medium underline" href="/sign-up">
-        Sign up
-      </Link>
-    </p>
-    <div className="flex flex-col gap-2 [&>input]:mb-3 mt-8">
-      <Label htmlFor="email">Email</Label>
-      <Input name="email" placeholder="you@example.com" required />
-      <div className="flex justify-between items-center">
-        <Label htmlFor="password">Password</Label>
+import { RoutePath } from '@/enums';
+import { Message } from '@/types';
+
+interface LoginProps {
+  searchParams: Message;
+}
+
+const Login: FC<LoginProps> = ({ searchParams }) => (
+  <Card className="mx-auto max-w-sm">
+    <CardHeader>
+      <CardTitle className="text-2xl">Sign in</CardTitle>
+
+      <CardDescription>Enter your email to sign in to your account</CardDescription>
+    </CardHeader>
+
+    <CardContent className="flex flex-col gap-4">
+      <form className="grid gap-4">
+        <div className="grid gap-2">
+          <Label htmlFor="email">Email</Label>
+
+          <Input id="email" name="email" type="email" placeholder="you@example.com" required />
+        </div>
+
+        <div className="grid gap-2">
+          <div className="flex items-center">
+            <Label htmlFor="password">Password</Label>
+          </div>
+
+          <Input minLength={6} name="password" id="password" type="password" required />
+        </div>
+
+        {'error' in searchParams && (
+          <div className="text-sm font-medium text-destructive">{searchParams.error}</div>
+        )}
+
+        <Button formAction={signInAction} className="w-full">
+          Sign in
+        </Button>
+      </form>
+
+      <OAuthButtons />
+
+      <div className="text-center">
+        <p className="text-sm text-foreground">
+          Don&apos;t have an account?{' '}
+          <Link className="text-foreground font-medium underline" href={RoutePath.SignUp}>
+            Sign up
+          </Link>
+        </p>
       </div>
-      <Input type="password" name="password" placeholder="Your password" required />
-      <SubmitButton pendingText="Signing In..." formAction={signInAction}>
-        Sign in
-      </SubmitButton>
-      <FormMessage message={searchParams} />
-    </div>
-  </form>
+    </CardContent>
+  </Card>
 );
 
 export default Login;
