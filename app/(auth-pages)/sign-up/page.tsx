@@ -27,21 +27,9 @@ const Signup = ({ searchParams }: { searchParams: Message }) => {
       </p>
       <div className="flex flex-col gap-2 [&>input]:mb-3 mt-8">
         <Label htmlFor="password">First name</Label>
-        <Input
-          type="firstName"
-          name="firstName"
-          placeholder="Enter first name"
-          minLength={6}
-          required
-        />
+        <Input type="firstName" name="firstName" placeholder="Enter first name" required />
         <Label htmlFor="password">Last name</Label>
-        <Input
-          type="lastName"
-          name="lastName"
-          placeholder="Enter last name"
-          minLength={6}
-          required
-        />
+        <Input type="lastName" name="lastName" placeholder="Enter last name" required />
         <Label htmlFor="email">Email</Label>
         <Input name="email" placeholder="you@example.com" required />
         <Label htmlFor="password">Password</Label>
