@@ -33,7 +33,7 @@ export const updateSession = async (request: NextRequest) => {
 
   const user = await supabase.auth.getUser();
 
-  if (request.nextUrl.pathname.startsWith(RoutePath.Protected) && user.error) {
+  if (request.nextUrl.pathname.startsWith(RoutePath.Recipes) && user.error) {
     return NextResponse.redirect(new URL(RoutePath.SignIn, request.url));
   }
 
@@ -42,7 +42,14 @@ export const updateSession = async (request: NextRequest) => {
       return NextResponse.redirect(new URL(RoutePath.SignIn, request.url));
     }
 
-    return NextResponse.redirect(new URL(RoutePath.Protected, request.url));
+    return NextResponse.redirect(new URL(RoutePath.Recipes, request.url));
+  }
+
+  if (
+    user &&
+    [RoutePath.SignIn, RoutePath.SignUp].includes(request.nextUrl.pathname as RoutePath)
+  ) {
+    return NextResponse.redirect(new URL(RoutePath.Recipes, request.url));
   }
 
   return response;

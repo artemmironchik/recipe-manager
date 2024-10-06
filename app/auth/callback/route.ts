@@ -8,7 +8,7 @@ export async function GET(request: Request) {
   const { searchParams, origin } = new URL(request.url);
 
   const code = searchParams.get('code');
-  const redirectTo = searchParams.get('redirect_to')?.toString() || RoutePath.Protected;
+  const redirectTo = searchParams.get('redirect_to')?.toString() || RoutePath.Recipes;
 
   if (code) {
     const supabase = createClient();
@@ -19,7 +19,7 @@ export async function GET(request: Request) {
         return NextResponse.redirect(`${origin}${redirectTo}`);
       }
 
-      return NextResponse.redirect(`${origin}${RoutePath.Protected}`);
+      return NextResponse.redirect(`${origin}${RoutePath.Recipes}`);
     }
   }
 

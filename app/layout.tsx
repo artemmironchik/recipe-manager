@@ -32,7 +32,7 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => (
               </div>
             </nav>
 
-            <div className="flex flex-1 justify-center flex-col gap-20 max-w-7xl w-full p-5">
+            <div className="flex flex-1 justify-center flex-col gap-20 max-w-7xl w-full h-full p-5">
               {children}
             </div>
 

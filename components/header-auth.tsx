@@ -2,7 +2,7 @@ import { createClient } from '@/utils/supabase/server';
 
 import { ThemeSwitcher } from '@/components/theme-switcher';
 
-import { getFullName } from '@/utils/utils';
+import { getFullName } from '@/utils';
 
 import { HeaderAuthButtons } from './header-auth-buttons';
 

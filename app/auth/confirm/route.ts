@@ -10,7 +10,7 @@ export async function GET(request: NextRequest) {
 
   const tokenHash = searchParams.get('token_hash');
   const type = searchParams.get('type') as EmailOtpType | null;
-  const next = searchParams.get('next') || RoutePath.Protected;
+  const next = searchParams.get('next') || RoutePath.Recipes;
 
   const redirectTo = request.nextUrl.clone();
 

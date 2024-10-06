@@ -6,7 +6,7 @@ import { flattenValidationErrors } from 'next-safe-action';
 
 import { actionClient } from '@/lib/safe-action';
 
-import { encodedRedirect, getURL } from '@/utils/utils';
+import { encodedRedirect, getURL } from '@/utils';
 import { createClient } from '@/utils/supabase/server';
 
 import { RoutePath } from '@/enums';
@@ -84,7 +84,7 @@ export const signInAction = actionClient
       return encodedRedirect('error', RoutePath.SignIn, error.message);
     }
 
-    return redirect(RoutePath.Protected);
+    return redirect(RoutePath.Recipes);
   });
 
 export const signOutAction = actionClient.action(async () => {

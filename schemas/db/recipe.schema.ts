@@ -11,7 +11,7 @@ export const recipeSchema = dbSchema
     image_url: z.string(),
     ingredients: z.array(z.string()),
     instructions: z.array(z.string()),
-    cook_time: z.string().optional(),
+    cook_time: z.string().optional().nullable(),
     tags: z.array(z.string()).default([]),
     user_id: z.string(),
   })

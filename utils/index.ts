@@ -1,3 +1,5 @@
+/* eslint-disable no-nested-ternary */
+
 import { User } from '@supabase/supabase-js';
 import { redirect } from 'next/navigation';
 
@@ -8,15 +10,16 @@ import { redirect } from 'next/navigation';
  * @param {string} message - The message to be encoded and added as a query parameter.
  * @returns {never} This function doesn't return as it triggers a redirect.
  */
-export const encodedRedirect = (type: 'error' | 'success', path: string, message: string) => redirect(`${path}?${type}=${encodeURIComponent(message)}`);
+export const encodedRedirect = (type: 'error' | 'success', path: string, message: string) =>
+  redirect(`${path}?${type}=${encodeURIComponent(message)}`);
 
 export const getURL = (path: string = '') => {
-  // eslint-disable-next-line no-nested-ternary
-  let url = process.env.NEXT_PUBLIC_SITE_URL && process.env.NEXT_PUBLIC_SITE_URL.trim() !== ''
-    ? process.env.NEXT_PUBLIC_SITE_URL
-    : process.env.VERCEL_URL && process.env.VERCEL_URL.trim() !== ''
-      ? process.env.VERCEL_URL
-      : 'http://localhost:3000/';
+  let url =
+    process.env.NEXT_PUBLIC_SITE_URL && process.env.NEXT_PUBLIC_SITE_URL.trim() !== ''
+      ? process.env.NEXT_PUBLIC_SITE_URL
+      : process.env.VERCEL_URL && process.env.VERCEL_URL.trim() !== ''
+        ? process.env.VERCEL_URL
+        : 'http://localhost:3000/';
 
   url = url.replace(/\/+$/, '');
   url = url.includes('http') ? url : `https://${url}`;
@@ -49,4 +52,22 @@ export const getFullName = (user: User | null) => {
   }
 
   return '';
+};
+
+export const countOccurrences = (data: any, field: string) => {
+  if (!data) return {};
+
+  const counts: Record<string, number> = {};
+
+  data.forEach((item: any) => {
+    item[field].forEach((value: string) => {
+      counts[value] = counts[value] ? counts[value] + 1 : 1;
+
+      return value;
+    });
+
+    return item;
+  });
+
+  return counts;
 };

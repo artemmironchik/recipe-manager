@@ -1,6 +1,6 @@
 export enum RoutePath {
   // Private paths
-  Protected = '/protected',
+  Recipes = '/recipes',
   Home = '/',
 
   // Auth paths
