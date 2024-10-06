@@ -41,6 +41,7 @@ module.exports = {
     'react-hooks/exhaustive-deps': 'error',
     'import/prefer-default-export': 'off',
     'import/no-anonymous-default-export': 'off',
+    'prettier/prettier': 'error',
     'semi': ['warn', 'always'],
     'max-len': ['warn', {
       code: 100,
@@ -56,6 +57,8 @@ module.exports = {
     'comma-dangle': 'off',
     '@typescript-eslint/comma-dangle': 'off',
     'object-curly-newline': 'off',
+    'operator-linebreak': 'off',
+    '@typescript-eslint/indent': 'off',
   },
   settings: {
     'import/resolver': {

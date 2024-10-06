@@ -1,16 +1,27 @@
 'use client';
 
+import { FC } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+
+import { signOutAction } from '@/app/auth/actions';
 
 import { RoutePath } from '@/enums';
 
 import { Button } from './ui/button';
 
-export const HeaderAuthButtons = () => {
+interface HeaderAuthButtonsProps {
+  isAuthorized?: boolean;
+}
+
+export const HeaderAuthButtons: FC<HeaderAuthButtonsProps> = ({ isAuthorized }) => {
   const pathname = usePathname();
 
-  return (
+  return isAuthorized ? (
+    <Button onClick={() => signOutAction()} variant="outline">
+      Sign out
+    </Button>
+  ) : (
     <>
       {pathname !== RoutePath.SignIn && (
         <Button asChild size="sm" variant="outline">

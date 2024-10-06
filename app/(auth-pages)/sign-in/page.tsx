@@ -1,23 +1,20 @@
 import { FC } from 'react';
 import Link from 'next/link';
 
-import { signInAction } from '@/app/auth/actions';
-
 import { OAuthButtons } from '@/components/oauth-buttons';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
 
 import { RoutePath } from '@/enums';
 import { Message } from '@/types';
+
+import { SignInForm } from './_components/sign-in-form';
 
 interface LoginProps {
   searchParams: Message;
 }
 
 const Login: FC<LoginProps> = ({ searchParams }) => (
-  <Card className="mx-auto max-w-sm">
+  <Card className="mx-auto max-w-sm w-full">
     <CardHeader>
       <CardTitle className="text-2xl">Sign in</CardTitle>
 
@@ -25,29 +22,7 @@ const Login: FC<LoginProps> = ({ searchParams }) => (
     </CardHeader>
 
     <CardContent className="flex flex-col gap-4">
-      <form className="grid gap-4">
-        <div className="grid gap-2">
-          <Label htmlFor="email">Email</Label>
-
-          <Input id="email" name="email" type="email" placeholder="you@example.com" required />
-        </div>
-
-        <div className="grid gap-2">
-          <div className="flex items-center">
-            <Label htmlFor="password">Password</Label>
-          </div>
-
-          <Input minLength={6} name="password" id="password" type="password" required />
-        </div>
-
-        {'error' in searchParams && (
-          <div className="text-sm font-medium text-destructive">{searchParams.error}</div>
-        )}
-
-        <Button formAction={signInAction} className="w-full">
-          Sign in
-        </Button>
-      </form>
+      <SignInForm searchParams={searchParams} />
 
       <OAuthButtons />
 
