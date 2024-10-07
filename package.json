@@ -5,7 +5,7 @@
     "build": "next build",
     "start": "next start",
     "prepare": "husky install",
-    "postinstall": "export $(cat .env | grep \"^[^#;]\" |xargs) && npx prisma generate --no-engine"
+    "postinstall": "export $(cat .env | grep \"^[^#;]\" |xargs) && npx prisma generate"
   },
   "husky": {
     "hooks": {
