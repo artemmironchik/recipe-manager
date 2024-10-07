@@ -19,9 +19,11 @@ export const HeaderAuthButtons: FC<HeaderAuthButtonsProps> = ({ isAuthorized }) 
 
   return isAuthorized ? (
     <>
-      <Link href="/create-recipe">
-        <Button>Create Recipe</Button>
-      </Link>
+      {pathname !== RoutePath.CreateRecipe && (
+        <Link href={RoutePath.CreateRecipe}>
+          <Button>Create Recipe</Button>
+        </Link>
+      )}
 
       <Button onClick={() => signOutAction()} variant="outline">
         Sign out

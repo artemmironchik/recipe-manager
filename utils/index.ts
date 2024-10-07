@@ -1,5 +1,6 @@
 /* eslint-disable no-nested-ternary */
 
+import { IdentityData, PrismaUser } from '@/types';
 import { User } from '@supabase/supabase-js';
 import { redirect } from 'next/navigation';
 
@@ -28,7 +29,7 @@ export const getURL = (path: string = '') => {
   return newPath ? `${url}/${newPath}` : url;
 };
 
-export const getFullName = (user: User | null) => {
+export const getFullName = (user: User | PrismaUser | null) => {
   if (!user) return '';
 
   const { identities } = user;
@@ -40,7 +41,7 @@ export const getFullName = (user: User | null) => {
   if (emailProfile) {
     const { identity_data: data } = emailProfile;
 
-    return (data?.first_name || '') + (data?.last_name || '');
+    return ((data as IdentityData)?.first_name || '') + ((data as IdentityData)?.last_name || '');
   }
 
   const githubProfile = identities.find(({ provider }) => provider === 'github');
@@ -48,7 +49,7 @@ export const getFullName = (user: User | null) => {
   if (githubProfile) {
     const { identity_data: data } = githubProfile;
 
-    return data?.full_name || data?.user_name;
+    return (data as IdentityData)?.full_name || (data as IdentityData)?.user_name;
   }
 
   return '';

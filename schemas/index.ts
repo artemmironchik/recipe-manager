@@ -3,4 +3,5 @@ export * from './db/profile.schema';
 export * from './db/recipe.schema';
 
 export * from './validation/auth.schema';
+export * from './common/index.schema';
 export * from './validation/recipe.schema';

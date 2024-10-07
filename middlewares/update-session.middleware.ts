@@ -31,14 +31,17 @@ export const updateSession = async (request: NextRequest) => {
     },
   );
 
-  const user = await supabase.auth.getUser();
+  const {
+    data: { user },
+    error,
+  } = await supabase.auth.getUser();
 
-  if (request.nextUrl.pathname.startsWith(RoutePath.Recipes) && user.error) {
+  if (request.nextUrl.pathname.startsWith(RoutePath.Recipes) && error) {
     return NextResponse.redirect(new URL(RoutePath.SignIn, request.url));
   }
 
   if (request.nextUrl.pathname === RoutePath.Home) {
-    if (user.error) {
+    if (error) {
       return NextResponse.redirect(new URL(RoutePath.SignIn, request.url));
     }
 

@@ -14,7 +14,9 @@ model Profile {
   id         String   @id @db.Uuid
   first_name String?
   last_name  String?
+  user_id    String   @db.Uuid
   recipe     Recipe[]
+  user       users    @relation(fields: [user_id], references: [id], onDelete: Cascade)
 
   @@map("profile")
   @@schema("public")
@@ -345,6 +347,7 @@ model users {
   mfa_factors                 mfa_factors[]
   one_time_tokens             one_time_tokens[]
   sessions                    sessions[]
+  Profile                     Profile[]
 
   @@index([instance_id])
   @@index([is_anonymous])

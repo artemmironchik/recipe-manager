@@ -1,19 +1,65 @@
+import { FC } from 'react';
+
 import { prisma } from '@/lib/prisma';
 
-import { countOccurrences, getFullName } from '@/utils';
-import { createClient } from '@/utils/supabase/server';
+import { Prisma } from '@prisma/client';
 
-import { ExtendedRecipe } from '@/types';
+import { countOccurrences, getFullName } from '@/utils';
+
+import { ExtendedRecipe, PrismaUser, RecipeQuery } from '@/types';
 
 import { RecipesFilters } from './_components/recipes-filters';
 import { RecipesList } from './_components/recipes-list';
 
-const RecipesPage = async () => {
-  const supabase = createClient();
+interface RecipesPageProps {
+  searchParams: RecipeQuery;
+}
+
+const RecipesPage: FC<RecipesPageProps> = async ({ searchParams }) => {
+  const buildQuery = () => {
+    let query: Prisma.RecipeWhereInput = {};
+
+    if (searchParams.query) {
+      query = {
+        title: {
+          contains: searchParams.query,
+        },
+      };
+    }
+
+    if (searchParams.ing) {
+      query = {
+        ...query,
+        ingredients: {
+          hasSome: searchParams.ing.split(','),
+        },
+      };
+    }
+
+    if (searchParams.tag) {
+      query = {
+        ...query,
+        tags: {
+          hasSome: searchParams.tag.split(','),
+        },
+      };
+    }
+
+    return Object.keys(query).length ? query : undefined;
+  };
 
   const recipes = await prisma.recipe.findMany({
+    where: buildQuery(),
     include: {
-      profile: true,
+      profile: {
+        include: {
+          user: {
+            include: {
+              identities: true,
+            },
+          },
+        },
+      },
     },
   });
 
@@ -38,22 +84,18 @@ const RecipesPage = async () => {
         };
       }
 
-      const {
-        data: { user },
-      } = await supabase.auth.admin.getUserById(recipe.user_id);
-
       return {
         ...rest,
-        userFullName: getFullName(user) || 'No name',
+        userFullName: getFullName(profile.user as PrismaUser) || 'No name',
       };
     }),
   );
 
   return (
     <div className="container flex flex-1 gap-4 mx-auto py-8">
-      <RecipesFilters ingredients={ingredients} tags={tags} />
+      <RecipesFilters searchParams={searchParams} ingredients={ingredients} tags={tags} />
 
-      <RecipesList recipes={mappedRecipes} />
+      <RecipesList searchParams={searchParams} recipes={mappedRecipes} />
     </div>
   );
 };

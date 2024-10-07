@@ -3,6 +3,7 @@ import { GeistSans } from 'geist/font/sans';
 import { ThemeProvider } from 'next-themes';
 
 import HeaderAuth from '@/components/header-auth';
+import { Toaster } from '@/components/ui/toaster';
 
 import './globals.css';
 
@@ -50,6 +51,8 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => (
               </p>
             </footer>
           </div>
+
+          <Toaster />
         </main>
       </ThemeProvider>
     </body>

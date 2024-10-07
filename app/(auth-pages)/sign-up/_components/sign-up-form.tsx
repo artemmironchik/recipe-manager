@@ -1,7 +1,7 @@
 'use client';
 
 import { FC } from 'react';
-import { useForm } from 'react-hook-form';
+import { SubmitHandler, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useAction } from 'next-safe-action/hooks';
 
@@ -40,7 +40,7 @@ export const SignUpForm: FC<SignUpFormProps> = ({ searchParams }) => {
     ? Object.values(signUpResult.validationErrors).filter(Boolean)
     : [];
 
-  const onSubmit = async (data: SignUpParams) => {
+  const onSubmit: SubmitHandler<SignUpParams> = async (data) => {
     signUp(data);
 
     methods.reset(data);
