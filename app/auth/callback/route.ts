@@ -3,9 +3,12 @@ import { NextResponse } from 'next/server';
 import { createClient } from '@/utils/supabase/server';
 
 import { RoutePath } from '@/enums';
+import { getURL } from '@/utils';
 
 export async function GET(request: Request) {
-  const { searchParams, origin } = new URL(request.url);
+  const { searchParams } = new URL(request.url);
+
+  const host = getURL();
 
   const code = searchParams.get('code');
   const redirectTo = searchParams.get('redirect_to')?.toString() || RoutePath.Recipes;
@@ -16,14 +19,14 @@ export async function GET(request: Request) {
 
     if (!error) {
       if (redirectTo) {
-        return NextResponse.redirect(`${origin}${redirectTo}`);
+        return NextResponse.redirect(`${host}${redirectTo}`);
       }
 
-      return NextResponse.redirect(`${origin}${RoutePath.Recipes}`);
+      return NextResponse.redirect(`${host}${RoutePath.Recipes}`);
     }
   }
 
   return NextResponse.redirect(`
-    ${origin}${RoutePath.SignIn}?error=${encodeURIComponent('Could not login with provider')}
+    ${host}${RoutePath.SignIn}?error=${encodeURIComponent('Could not login with provider')}
   `);
 }
